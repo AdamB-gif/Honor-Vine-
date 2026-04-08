@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://honorandvineholdings.com/sitemap.xml
