@@ -837,7 +837,7 @@
       </div>
 
       <!-- Form -->
-      <form onsubmit="handleSubmit(event)" novalidate>
+      <form id="contact-form" action="https://formspree.io/f/mqegjpov" method="POST" novalidate>
         <div class="name-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
           <div>
             <label for="fname">First Name</label>
@@ -864,9 +864,12 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="5" placeholder="Tell us about your situation or inquiry..." required style="resize:vertical;"></textarea>
         </div>
-        <button type="submit" class="btn-submit">Send Message</button>
+        <button type="submit" class="btn-submit" id="submit-btn">Send Message</button>
         <div id="form-success" style="display:none; margin-top:1rem; padding:1rem; border:1px solid rgba(196,150,58,0.4); border-radius:3px; color:var(--gold-light); font-size:0.85rem; font-weight:300; line-height:1.6;">
           Thank you for reaching out. We'll be in touch shortly.
+        </div>
+        <div id="form-error" style="display:none; margin-top:1rem; padding:1rem; border:1px solid rgba(220,50,50,0.4); border-radius:3px; color:#f87171; font-size:0.85rem; font-weight:300; line-height:1.6;">
+          Something went wrong. Please email us directly at <a href="mailto:info@honorandvineholdings.com" style="color:var(--gold-light);">info@honorandvineholdings.com</a>
         </div>
       </form>
     </div>
@@ -922,11 +925,37 @@
   }
 
   // ── Contact form ──
-  function handleSubmit(e) {
+  const contactForm = document.getElementById('contact-form');
+  contactForm.addEventListener('submit', async function(e) {
     e.preventDefault();
-    document.getElementById('form-success').style.display = 'block';
-    e.target.reset();
-  }
+    const btn = document.getElementById('submit-btn');
+    const success = document.getElementById('form-success');
+    const error = document.getElementById('form-error');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    success.style.display = 'none';
+    error.style.display = 'none';
+    try {
+      const response = await fetch('https://formspree.io/f/mqegjpov', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(contactForm)
+      });
+      if (response.ok) {
+        success.style.display = 'block';
+        contactForm.reset();
+      } else {
+        error.style.display = 'block';
+      }
+    } catch(err) {
+      error.style.display = 'block';
+    } finally {
+      btn.textContent = 'Send Message';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  });
 
   // ── Smooth scroll for anchor links ──
   document.querySelectorAll('a[href^="#"]').forEach(link => {
