@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honor and Vine Holdings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-deep:   #0F3220;
+      --green-mid:    #1D5C38;
+      --green-light:  #2E7A4E;
+      --gold:         #C4963A;
+      --gold-light:   #E8C97A;
+      --gold-pale:    #F5E9C8;
+      --cream:        #F8F4EC;
+      --cream-dark:   #EEE8DA;
+      --ink:          #1A1A1A;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    #nav.scrolled {
+      background: var(--green-deep);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.35);
+    }
+    .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      opacity: 0.85;
+      text-decoration: none;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    .nav-link:hover { opacity: 1; color: #fff; }
+    .nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 2px; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196,150,58,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 20% 100%, rgba(29,92,56,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 80%, rgba(15,50,32,0.4) 0%, transparent 60%),
+        var(--green-deep);
+    }
+
+    /* Vine decorative lines */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle 1px at 20% 30%, rgba(196,150,58,0.4) 1px, transparent 1px),
+        radial-gradient(circle 1px at 80% 20%, rgba(196,150,58,0.3) 1px, transparent 1px),
+        radial-gradient(circle 1px at 15% 70%, rgba(196,150,58,0.25) 1px, transparent 1px),
+        radial-gradient(circle 1px at 85% 75%, rgba(196,150,58,0.35) 1px, transparent 1px);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(196,150,58,0.1);
+      border: 1px solid rgba(196,150,58,0.3);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 2px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+      line-height: 1.7;
+      color: rgba(255,255,255,0.6);
+      font-weight: 300;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, #A87A28 100%);
+      color: var(--green-deep);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 2px;
+      box-shadow: 0 4px 24px rgba(196,150,58,0.35), 0 1px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(196,150,58,0.45), 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .btn-primary:active { transform: translateY(0) scale(0.99); }
+    .btn-primary:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+
+    .btn-ghost {
+      display: inline-block;
+      border: 1px solid rgba(196,150,58,0.4);
+      color: var(--gold-light);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 2px;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-ghost:hover {
+      background: rgba(196,150,58,0.1);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .btn-ghost:active { transform: translateY(0); }
+    .btn-ghost:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+
+    /* Scroll indicator */
+    .scroll-dot {
+      width: 28px; height: 44px;
+      border: 1.5px solid rgba(196,150,58,0.4);
+      border-radius: 14px;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 6px;
+      margin: 0 auto;
+    }
+    .scroll-dot::after {
+      content: '';
+      width: 4px; height: 8px;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: scrollBounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(10px); opacity: 0.3; }
+    }
+
+    /* ── GOLD DIVIDER ── */
+    .gold-rule {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background:
+        radial-gradient(ellipse 70% 50% at 100% 50%, rgba(29,92,56,0.06) 0%, transparent 70%),
+        var(--cream);
+    }
+    .about-stat {
+      border-top: 1px solid rgba(196,150,58,0.25);
+      padding-top: 1.5rem;
+    }
+    .about-stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--green-mid);
+      letter-spacing: -0.03em;
+    }
+    .about-stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* ── PILLARS ── */
+    #pillars {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(196,150,58,0.08) 0%, transparent 70%),
+        var(--green-deep);
+    }
+    .pillar-card {
+      border: 1px solid rgba(196,150,58,0.18);
+      background: rgba(255,255,255,0.03);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pillar-card:hover {
+      background: rgba(196,150,58,0.06);
+      border-color: rgba(196,150,58,0.4);
+      transform: translateY(-4px);
+    }
+    .pillar-icon {
+      width: 48px; height: 48px;
+      border: 1px solid rgba(196,150,58,0.35);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio {
+      background:
+        radial-gradient(ellipse 60% 40% at 0% 50%, rgba(29,92,56,0.07) 0%, transparent 60%),
+        var(--cream);
+    }
+    .portfolio-card {
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow:
+        0 2px 8px rgba(15,50,32,0.06),
+        0 8px 32px rgba(15,50,32,0.08),
+        0 0 0 1px rgba(196,150,58,0.1);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .portfolio-card:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 4px 16px rgba(15,50,32,0.1),
+        0 16px 48px rgba(15,50,32,0.14),
+        0 0 0 1px rgba(196,150,58,0.2);
+    }
+    .portfolio-img-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    .portfolio-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(0.9);
+      transition: transform 0.5s ease;
+    }
+    .portfolio-card:hover .portfolio-img-wrap img {
+      transform: scale(1.04);
+    }
+    .portfolio-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15,50,32,0.55) 0%, rgba(15,50,32,0.1) 60%, transparent 100%);
+    }
+    .portfolio-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(29,92,56,0.15);
+      mix-blend-mode: multiply;
+    }
+    .portfolio-sector {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .portfolio-body {
+      padding: 1.75rem 1.75rem 2rem;
+    }
+
+    /* ── APPROACH ── */
+    #approach {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196,150,58,0.07) 0%, transparent 70%),
+        var(--cream-dark);
+    }
+    .approach-step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.5;
+      flex-shrink: 0;
+      width: 3rem;
+      text-align: right;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 50%, rgba(29,92,56,0.9) 0%, var(--green-deep) 100%);
+    }
+
+    input, textarea {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(196,150,58,0.25);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      border-radius: 3px;
+      padding: 12px 16px;
+      width: 100%;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35); }
+    input:focus, textarea:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.1);
+    }
+    input:focus-visible, textarea:focus-visible { outline: 2px solid var(--gold); outline-offset: 0; }
+    label {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, var(--gold) 0%, #A87A28 100%);
+      color: var(--green-deep);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 2px;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(196,150,58,0.35);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(196,150,58,0.5);
+    }
+    .btn-submit:active { transform: translateY(0) scale(0.99); }
+    .btn-submit:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      border-top: 1px solid rgba(196,150,58,0.15);
+    }
+
+    /* ── Mobile menu ── */
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--green-deep);
+      z-index: 490;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    #mobile-menu.open { display: flex; }
+    .mobile-nav-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .mobile-nav-link:hover { color: var(--gold-light); }
+    .mobile-nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--gold-light);
+      border-radius: 1px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .hamburger:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 2px; }
+
+    /* ── Mobile responsive fixes ── */
+    @media (max-width: 767px) {
+      /* Reduce section padding on mobile */
+      #about, #pillars, #portfolio, #approach, #contact { padding: 5rem 1.25rem !important; }
+      footer { padding: 3rem 1.25rem 2rem !important; }
+
+      /* Hero padding tighter */
+      #hero > div { padding: 7rem 1.25rem 4rem !important; }
+
+      /* Hero buttons full width */
+      #hero .btn-primary, #hero .btn-ghost {
+        width: 100%;
+        text-align: center;
+        padding: 16px 20px !important;
+      }
+      #hero > div > div[style*="flex"] { flex-direction: column !important; gap: 0.75rem !important; }
+
+      /* Stats: 2 cols top, then 1 col for 3rd */
+      .stats-grid { grid-template-columns: 1fr 1fr !important; }
+      .stats-grid .about-stat:last-child { grid-column: 1 / -1; border-top: 1px solid rgba(196,150,58,0.25); }
+
+      /* About quote box: less padding */
+      .quote-box { padding: 2rem 1.5rem !important; }
+      .quote-box img { width: 130px !important; margin-bottom: 1.5rem !important; }
+
+      /* Contact name fields: stack */
+      .name-grid { grid-template-columns: 1fr !important; }
+
+      /* Pillar cards: full width */
+      #pillars .pillar-card { padding: 2rem 1.5rem !important; }
+
+      /* Portfolio cards min-width override */
+      #portfolio > div > div > div[style*="grid"] { grid-template-columns: 1fr !important; }
+
+      /* Footer copyright: center & stack */
+      footer > div > div:last-child { flex-direction: column !important; align-items: center !important; text-align: center !important; gap: 0.5rem !important; }
+
+      /* Approach step numbers smaller */
+      .step-num { font-size: 2rem !important; width: 2rem !important; }
+
+      /* Nav logo size */
+      #nav img { height: 40px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ MOBILE MENU ═══════════════ -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">About</a>
+  <a href="#portfolio" class="mobile-nav-link" onclick="closeMobileMenu()">Portfolio</a>
+  <a href="#approach" class="mobile-nav-link" onclick="closeMobileMenu()">Approach</a>
+  <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="nav" aria-label="Main navigation">
+  <div style="max-width:1200px; margin:0 auto; padding:0 2rem; height:84px; display:flex; align-items:center; justify-content:space-between;">
+    <a href="#" aria-label="Honor and Vine Holdings — Home">
+      <img src="brand_assets/logo.jpg" alt="Honor and Vine Holdings" style="height:68px; width:auto; display:block;" />
+    </a>
+    <!-- Desktop links -->
+    <div style="display:flex; gap:2.5rem; align-items:center;" class="hidden-mobile">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#portfolio" class="nav-link">Portfolio</a>
+      <a href="#approach" class="nav-link">Approach</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <a href="#contact" class="btn-primary hidden-mobile" style="padding:10px 24px;">Inquire</a>
+    <!-- Hamburger -->
+    <button class="hamburger show-mobile" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<style>
+  @media (min-width: 768px) { .hidden-mobile { display: flex !important; } .show-mobile { display: none !important; } }
+  @media (max-width: 767px) { .hidden-mobile { display: none !important; } .show-mobile { display: flex !important; } }
+</style>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero" aria-label="Hero">
+  <div style="position:relative; z-index:2; padding:8rem 2rem 6rem; max-width:800px; margin:0 auto;">
+    <div style="margin-bottom:1.5rem;">
+      <span class="hero-tag">Est. — Asset Management</span>
+    </div>
+    <h1 class="hero-h1" style="margin-bottom:1.75rem;">
+      Building Legacy<br><em>Through Principled</em><br>Ownership
+    </h1>
+    <p class="hero-sub" style="margin-bottom:2.5rem;">
+      Honor and Vine Holdings is a private holding company that acquires, stewards, and grows exceptional businesses — grounded in integrity, built to endure.
+    </p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="#portfolio" class="btn-primary">Our Portfolio</a>
+      <a href="#about" class="btn-ghost">Learn More</a>
+    </div>
+    <div style="margin-top:4rem;">
+      <div class="scroll-dot" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section id="about" style="padding:7rem 2rem;" aria-label="About">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:1fr; gap:4rem; align-items:start;">
+      <!-- Left copy -->
+      <div style="max-width:640px; margin:0 auto;">
+        <p class="section-label" style="margin-bottom:1rem;">Who We Are</p>
+        <div class="gold-rule" style="margin:0 0 2rem 0;"></div>
+        <h2 class="serif" style="font-size:clamp(2.2rem,4vw,3.2rem); font-weight:300; line-height:1.2; letter-spacing:-0.02em; color:var(--green-deep); margin-bottom:1.75rem;">
+          A steward of businesses built on honor, purpose, and long-term value.
+        </h2>
+        <p style="line-height:1.8; color:#444; font-weight:300; margin-bottom:1.25rem; font-size:1.05rem;">
+          Honor and Vine Holdings is a private holding company focused on acquiring and stewarding businesses across select industries. We invest not just capital, but conviction — partnering with operators who share our commitment to excellence and enduring value creation.
+        </p>
+        <p style="line-height:1.8; color:#444; font-weight:300; font-size:1.05rem;">
+          Our approach is patient and principled. We hold assets for the long term, giving our portfolio companies the stability and resources to grow at their own pace — without the pressure of short-term financial targets.
+        </p>
+
+        <!-- Stats row -->
+        <div class="stats-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:3.5rem;">
+          <div class="about-stat">
+            <div class="about-stat-number">2</div>
+            <div class="about-stat-label" style="margin-top:0.5rem;">Portfolio Companies</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">2</div>
+            <div class="about-stat-label" style="margin-top:0.5rem;">Industries Served</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number">∞</div>
+            <div class="about-stat-label" style="margin-top:0.5rem;">Investment Horizon</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right accent block -->
+      <div style="display:flex; justify-content:center; align-items:center;">
+        <div style="position:relative; max-width:420px; width:100%;">
+          <!-- Decorative border box -->
+          <div class="quote-box" style="border:1px solid rgba(196,150,58,0.25); border-radius:4px; padding:3rem; background:linear-gradient(135deg,rgba(196,150,58,0.05) 0%,rgba(29,92,56,0.04) 100%); text-align:center;">
+            <img src="brand_assets/logo.jpg" alt="" aria-hidden="true" style="width:240px; height:auto; margin:0 auto 2rem;" />
+            <blockquote class="serif" style="font-size:1.35rem; font-weight:300; font-style:italic; color:var(--green-deep); line-height:1.6; margin:0;">
+              "We measure our success not in quarters, but in generations."
+            </blockquote>
+            <div class="gold-rule" style="margin:1.5rem auto 0;"></div>
+          </div>
+          <!-- Corner accents -->
+          <div style="position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);border-radius:2px 0 0 0;"></div>
+          <div style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);border-radius:0 2px 0 0;"></div>
+          <div style="position:absolute;bottom:-6px;left:-6px;width:24px;height:24px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);border-radius:0 0 0 2px;"></div>
+          <div style="position:absolute;bottom:-6px;right:-6px;width:24px;height:24px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);border-radius:0 0 2px 0;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SCRIPTURE BAND ═══════════════ -->
+<section aria-label="Scripture" style="background:var(--green-deep); padding:5rem 2rem; position:relative; overflow:hidden;">
+  <!-- Decorative radial glow -->
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(196,150,58,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+  <!-- Top & bottom gold lines -->
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,150,58,0.35),transparent);"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,150,58,0.35),transparent);"></div>
+
+  <div style="max-width:720px;margin:0 auto;text-align:center;position:relative;z-index:1;">
+    <!-- Open quote mark -->
+    <div style="font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:0.6;color:rgba(196,150,58,0.25);margin-bottom:1.5rem;">&ldquo;</div>
+    <blockquote style="margin:0;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:300;font-style:italic;line-height:1.65;letter-spacing:0.01em;color:rgba(255,255,255,0.92);margin:0 0 0.5rem;">
+        I am the true vine, and my Father is the vinedresser. Every branch in me that does not bear fruit he takes away, and every branch that does bear fruit he prunes, that it may bear more fruit.
+      </p>
+    </blockquote>
+    <div style="margin-top:2rem;display:flex;align-items:center;justify-content:center;gap:1rem;">
+      <div style="height:1px;width:40px;background:linear-gradient(90deg,transparent,rgba(196,150,58,0.5));"></div>
+      <cite style="font-family:'Inter',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-style:normal;font-weight:500;">John 15:1–2 &nbsp;·&nbsp; ESV</cite>
+      <div style="height:1px;width:40px;background:linear-gradient(90deg,rgba(196,150,58,0.5),transparent);"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════��════════ PILLARS ═══════════════ -->
+<section id="pillars" style="padding:7rem 2rem;" aria-label="Our principles">
+  <div style="max-width:1200px; margin:0 auto; text-align:center;">
+    <p class="section-label" style="margin-bottom:1rem; color:var(--gold);">What We Stand For</p>
+    <div class="gold-rule" style="margin:0 auto 2rem;"></div>
+    <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem); font-weight:300; line-height:1.2; letter-spacing:-0.02em; color:#fff; margin-bottom:1rem;">
+      The Roots of Our Philosophy
+    </h2>
+    <p style="color:rgba(255,255,255,0.5); font-weight:300; line-height:1.7; max-width:520px; margin:0 auto 4rem; font-size:1rem;">
+      Every decision we make flows from a set of deeply held convictions about capital, character, and craft.
+    </p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; text-align:left;">
+      <!-- Pillar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:1.4rem; font-weight:500; color:#fff; margin-bottom:0.75rem; letter-spacing:-0.01em;">Long-Term Ownership</h3>
+        <p style="color:rgba(255,255,255,0.5); line-height:1.7; font-size:0.9rem; font-weight:300;">We acquire businesses with the intention of holding them indefinitely. No exit timelines, no forced sales — just patient, committed stewardship.</p>
+      </div>
+      <!-- Pillar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:1.4rem; font-weight:500; color:#fff; margin-bottom:0.75rem; letter-spacing:-0.01em;">Principled Capital</h3>
+        <p style="color:rgba(255,255,255,0.5); line-height:1.7; font-size:0.9rem; font-weight:300;">We deploy capital in businesses that create genuine value — for customers, employees, and communities alike. Profit is an outcome of purpose, not a substitute for it.</p>
+      </div>
+      <!-- Pillar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:1.4rem; font-weight:500; color:#fff; margin-bottom:0.75rem; letter-spacing:-0.01em;">Operator-First Culture</h3>
+        <p style="color:rgba(255,255,255,0.5); line-height:1.7; font-size:0.9rem; font-weight:300;">We back great operators and trust them to run their businesses. Our role is to provide resources and strategic support — never to micromanage or disrupt what works.</p>
+      </div>
+      <!-- Pillar 4 -->
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:1.4rem; font-weight:500; color:#fff; margin-bottom:0.75rem; letter-spacing:-0.01em;">Legacy Over Liquidity</h3>
+        <p style="color:rgba(255,255,255,0.5); line-height:1.7; font-size:0.9rem; font-weight:300;">Our measure of success is whether the businesses we hold are stronger, more resilient, and more impactful a decade from now than they are today.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PORTFOLIO ═══════════════ -->
+<section id="portfolio" style="padding:7rem 2rem;" aria-label="Portfolio">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="text-align:center; margin-bottom:4rem;">
+      <p class="section-label" style="margin-bottom:1rem;">What We Hold</p>
+      <div class="gold-rule" style="margin:0 auto 2rem;"></div>
+      <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem); font-weight:300; line-height:1.2; letter-spacing:-0.02em; color:var(--green-deep); margin-bottom:1rem;">
+        Our Portfolio Companies
+      </h2>
+      <p style="color:#666; font-weight:300; line-height:1.7; max-width:480px; margin:0 auto; font-size:1rem;">
+        A select group of businesses across industries, united by a commitment to quality and long-term thinking.
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; margin-bottom:3rem; max-width:900px; margin-left:auto; margin-right:auto;">
+      <!-- Card 1: Abe's Junk Solutions -->
+      <article class="portfolio-card" tabindex="0">
+        <div class="portfolio-img-wrap">
+          <img src="brand_assets/abes-logo.jpg" alt="Abe's Junk Solutions" loading="lazy" style="object-position:center center;" />
+          <div class="portfolio-img-overlay"></div>
+          <!-- Sector badge -->
+          <div style="position:absolute; bottom:1rem; left:1rem; z-index:2; background:rgba(15,50,32,0.85); border:1px solid rgba(196,150,58,0.35); padding:4px 12px; border-radius:2px;">
+            <span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); font-weight:600; font-family:'Inter',sans-serif;">Waste Management</span>
+          </div>
+        </div>
+        <div class="portfolio-body">
+          <p class="portfolio-sector" style="margin-bottom:0.5rem;">Environmental Services</p>
+          <h3 class="serif" style="font-size:1.6rem; font-weight:500; color:var(--green-deep); margin-bottom:0.75rem; letter-spacing:-0.01em;">Abe's Junk Solutions</h3>
+          <p style="color:#666; font-size:0.9rem; line-height:1.75; font-weight:300; margin-bottom:1.5rem;">A full-service junk removal and waste management operation built on reliability, fair pricing, and a commitment to responsible disposal. Abe's serves residential and commercial customers with same-day service and eco-conscious practices.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem;">
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(29,92,56,0.08); color:var(--green-mid); border:1px solid rgba(29,92,56,0.15); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Residential</span>
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(29,92,56,0.08); color:var(--green-mid); border:1px solid rgba(29,92,56,0.15); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Commercial</span>
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(29,92,56,0.08); color:var(--green-mid); border:1px solid rgba(29,92,56,0.15); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Eco Disposal</span>
+          </div>
+          <div style="width:32px; height:1px; background:var(--gold);"></div>
+        </div>
+      </article>
+
+      <!-- Card 2: IP Intellectual Property -->
+      <article class="portfolio-card" tabindex="0">
+        <div class="portfolio-img-wrap">
+          <img src="brand_assets/ip-logo.jpg" alt="IP Intellectual Property" loading="lazy" style="object-position:center center;" />
+          <div class="portfolio-img-overlay"></div>
+          <!-- Sector badge -->
+          <div style="position:absolute; bottom:1rem; left:1rem; z-index:2; background:rgba(15,50,32,0.85); border:1px solid rgba(196,150,58,0.35); padding:4px 12px; border-radius:2px;">
+            <span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); font-weight:600; font-family:'Inter',sans-serif;">Financial Technology</span>
+          </div>
+        </div>
+        <div class="portfolio-body">
+          <p class="portfolio-sector" style="margin-bottom:0.5rem;">Advisory &amp; Technology</p>
+          <h3 class="serif" style="font-size:1.6rem; font-weight:500; color:var(--green-deep); margin-bottom:0.75rem; letter-spacing:-0.01em;">IP Intellectual Property</h3>
+          <p style="color:#666; font-size:0.9rem; line-height:1.75; font-weight:300; margin-bottom:1.5rem;">A proprietary trading indicator platform and risk mitigation consultancy. IP delivers institutional-grade market intelligence and bespoke risk frameworks to traders, funds, and financial professionals seeking an edge grounded in data and discipline.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem;">
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(196,150,58,0.08); color:#8B6820; border:1px solid rgba(196,150,58,0.2); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Trading Indicators</span>
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(196,150,58,0.08); color:#8B6820; border:1px solid rgba(196,150,58,0.2); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Risk Consulting</span>
+            <span style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; background:rgba(196,150,58,0.08); color:#8B6820; border:1px solid rgba(196,150,58,0.2); padding:3px 10px; border-radius:2px; font-family:'Inter',sans-serif; font-weight:500;">Advisory</span>
+          </div>
+          <div style="width:32px; height:1px; background:var(--gold);"></div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Disclosure note -->
+    <p style="text-align:center; font-size:0.8rem; color:#999; font-weight:300; letter-spacing:0.02em;">
+      Honor and Vine Holdings — a permanent home for exceptional businesses.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ APPROACH ═══════════════ -->
+<section id="approach" style="padding:7rem 2rem;" aria-label="Our approach">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:1fr; gap:5rem; align-items:start; max-width:800px; margin:0 auto;">
+      <div>
+        <p class="section-label" style="margin-bottom:1rem;">How We Work</p>
+        <div class="gold-rule" style="margin:0 0 2rem;"></div>
+        <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem); font-weight:300; line-height:1.2; letter-spacing:-0.02em; color:var(--green-deep); margin-bottom:3rem;">
+          A deliberate process for lasting partnerships.
+        </h2>
+
+        <div style="display:flex; flex-direction:column; gap:2.5rem;">
+          <div class="approach-step">
+            <div class="step-num">01</div>
+            <div>
+              <h3 class="serif" style="font-size:1.35rem; font-weight:500; color:var(--green-deep); margin-bottom:0.5rem;">Identify</h3>
+              <p style="color:#555; font-size:0.95rem; line-height:1.75; font-weight:300;">We seek businesses with durable competitive advantages, strong cash flows, and leadership teams who think in decades. Quality over quantity, always.</p>
+            </div>
+          </div>
+          <div style="width:1px; height:32px; background:linear-gradient(to bottom,rgba(196,150,58,0.3),transparent); margin-left:calc(3rem + 0.75rem);"></div>
+          <div class="approach-step">
+            <div class="step-num">02</div>
+            <div>
+              <h3 class="serif" style="font-size:1.35rem; font-weight:500; color:var(--green-deep); margin-bottom:0.5rem;">Acquire</h3>
+              <p style="color:#555; font-size:0.95rem; line-height:1.75; font-weight:300;">We move with diligence and honesty. Our acquisitions are structured to be fair to sellers, stable for employees, and sustainable for the long term.</p>
+            </div>
+          </div>
+          <div style="width:1px; height:32px; background:linear-gradient(to bottom,rgba(196,150,58,0.3),transparent); margin-left:calc(3rem + 0.75rem);"></div>
+          <div class="approach-step">
+            <div class="step-num">03</div>
+            <div>
+              <h3 class="serif" style="font-size:1.35rem; font-weight:500; color:var(--green-deep); margin-bottom:0.5rem;">Steward</h3>
+              <p style="color:#555; font-size:0.95rem; line-height:1.75; font-weight:300;">After acquisition, we support our operators with capital, relationships, and strategic counsel — while staying out of their way so they can do what they do best.</p>
+            </div>
+          </div>
+          <div style="width:1px; height:32px; background:linear-gradient(to bottom,rgba(196,150,58,0.3),transparent); margin-left:calc(3rem + 0.75rem);"></div>
+          <div class="approach-step">
+            <div class="step-num">04</div>
+            <div>
+              <h3 class="serif" style="font-size:1.35rem; font-weight:500; color:var(--green-deep); margin-bottom:0.5rem;">Compound</h3>
+              <p style="color:#555; font-size:0.95rem; line-height:1.75; font-weight:300;">We reinvest returns to grow and diversify the portfolio over time — building a permanent, self-reinforcing ecosystem of great businesses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact" style="padding:7rem 2rem;" aria-label="Contact">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:1fr; gap:5rem; align-items:start; max-width:900px; margin:0 auto;">
+      <!-- Left -->
+      <div>
+        <p class="section-label" style="margin-bottom:1rem; color:var(--gold);">Get In Touch</p>
+        <div class="gold-rule" style="margin:0 0 2rem;"></div>
+        <h2 class="serif" style="font-size:clamp(2rem,4vw,3rem); font-weight:300; line-height:1.2; letter-spacing:-0.02em; color:#fff; margin-bottom:1.25rem;">
+          Let's Start a Conversation
+        </h2>
+        <p style="color:rgba(255,255,255,0.55); font-weight:300; line-height:1.75; font-size:1rem; margin-bottom:3rem;">
+          Whether you're an owner considering a sale, an operator seeking a capital partner, or simply curious about what we do — we'd be glad to hear from you.
+        </p>
+
+        <!-- Contact info -->
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+          <div style="display:flex; align-items:center; gap:1rem;">
+            <div style="width:36px; height:36px; border:1px solid rgba(196,150,58,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <a href="mailto:info@honorandvine.com" style="color:rgba(255,255,255,0.7); font-size:0.9rem; text-decoration:none; font-weight:300; transition:color 0.2s ease;" onmouseover="this.style.color='#E8C97A'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">info@honorandvine.com</a>
+          </div>
+          <div style="display:flex; align-items:center; gap:1rem;">
+            <div style="width:36px; height:36px; border:1px solid rgba(196,150,58,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C4963A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:300;">United States</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form onsubmit="handleSubmit(event)" novalidate>
+        <div class="name-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" placeholder="John" autocomplete="given-name" required />
+          </div>
+          <div>
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" placeholder="Smith" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="john@company.com" autocomplete="email" required />
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label for="company">Company / Organization</label>
+          <input type="text" id="company" name="company" placeholder="Your company (optional)" autocomplete="organization" />
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="How can we help?" required />
+        </div>
+        <div style="margin-bottom:2rem;">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell us about your situation or inquiry..." required style="resize:vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message</button>
+        <div id="form-success" style="display:none; margin-top:1rem; padding:1rem; border:1px solid rgba(196,150,58,0.4); border-radius:3px; color:var(--gold-light); font-size:0.85rem; font-weight:300; line-height:1.6;">
+          Thank you for reaching out. We'll be in touch shortly.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer style="padding:4rem 2rem 2.5rem;" aria-label="Footer">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:2rem; padding-bottom:2.5rem; border-bottom:1px solid rgba(196,150,58,0.12);">
+      <img src="brand_assets/logo.jpg" alt="Honor and Vine Holdings" style="height:64px; width:auto;" />
+      <nav aria-label="Footer navigation" style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#pillars" class="nav-link">Philosophy</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#approach" class="nav-link">Approach</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:2rem; flex-wrap:wrap; gap:1rem;">
+      <p style="color:rgba(255,255,255,0.3); font-size:0.75rem; font-weight:300;">
+        &copy; 2026 Honor and Vine Holdings. All rights reserved.
+      </p>
+      <p style="color:rgba(255,255,255,0.2); font-size:0.7rem; font-weight:300;">
+        Private Holding Company &mdash; Not an investment adviser
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Nav scroll effect ──
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ── Mobile menu ──
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+
+  function toggleMobileMenu() {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open', isOpen);
+    hamburgerBtn.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  // ── Contact form ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.reset();
+  }
+
+  // ── Smooth scroll for anchor links ──
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        closeMobileMenu();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
